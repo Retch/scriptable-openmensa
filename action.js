@@ -16,19 +16,22 @@ async function createWidget() {
   const data = await getData();
 
   const list = new ListWidget();
-  list.addSpacer();
-
-  const header = list.addText("🍽️ Mensa");
-  header.font = Font.mediumSystemFont(13);
-
-  list.addSpacer(12);
 
   if (data) {
-    today = data[0];
+    const today = data[0];
+    const date = today.date.split("-");
+
+    const header = list.addText("🍽️ Mensa " + date[2] + "." + date[1] + "." + date[0]);
+    header.font = Font.mediumSystemFont(13);
+    list.addSpacer(8);
 
     today.meals.map((meal) => {
-      const label = list.addText(meal.prices.students + " € - " + meal.name);
-      label.font = Font.mediumSystemFont(10);
+      let price = meal.prices.students.toString();
+      if (price.length == 3) {
+        price = price + "0";
+      }
+      const label = list.addText(price + " € - " + meal.name);
+      label.font = Font.mediumSystemFont(11);
     })
 
   } else {
